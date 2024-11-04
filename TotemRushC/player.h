@@ -30,6 +30,8 @@ void PlayerCapSpeed(Player* p);
 
 void PlayerApplyPhysics(Player* p, EntityList* elist, float dt);
 
+void PlayerCheckGrounded(Player* p, EntityList* elist);
+
 void PlayerJump(Player* p);
 
 void PlayerInput(Player* p);

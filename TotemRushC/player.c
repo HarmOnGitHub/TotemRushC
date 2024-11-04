@@ -1,6 +1,7 @@
 #include <math.h>
 #include <stdlib.h>
 #include "player.h"
+#include "physics.h"
 
 const float FLT_MAX = 340282346638528859811704183484516925440.0000000000000000f;
 
@@ -42,17 +43,18 @@ Player* PlayerInitPlayer(float x, float y, float w, float h, float accel, float 
 	return newPlayer;
 }
 
-void PlayerCollide(Player* p, EntityList* elist) {
+void PlayerCollide(Player* p, EntityList* elist, int passes) {
 	SDL_Rect pHitbox = {
 		(int)p->base.hitbox.x,
 		(int)p->base.hitbox.y,
 		(int)p->base.hitbox.w,
 		(int)p->base.hitbox.h
 	};
-
 	for (size_t i = 0; i < elist->size; i++) {
 
 		Entity* e = elist->entities[i];
+
+		if (e->type != ENTITY_GROUND) continue;
 
 		SDL_Rect eHitbox = {
 			(int)e->hitbox.x,
@@ -61,28 +63,71 @@ void PlayerCollide(Player* p, EntityList* elist) {
 			(int)e->hitbox.h,
 		};
 
-		if (SDL_HasIntersection(&pHitbox, &eHitbox)) {
-			// something ??
-			/*
-			
-				CHECK IF FUTURE POS COLLIDES WITH SOMETHING AND IF YES STOP IT
-			
-			*/
+		SDL_Rect intersect = { 0,0,0,0 };
+
+		if (SDL_IntersectRect(&pHitbox, &eHitbox, &intersect)) {
+
+			if (intersect.h < intersect.w) {
+				if (p->velocity[1] > 0) {
+					p->base.hitbox.y -= intersect.h;
+					p->base.y = p->base.hitbox.y;
+					p->grounded = true;
+					p->jumping = false;
+				}
+				else if (p->velocity[1] < 0) {
+					p->base.hitbox.y += intersect.h;
+					p->base.y = p->base.hitbox.y;
+				}
+				p->velocity[1] = 0;
+			}
+			else {
+				if (p->velocity[0] > 0) {
+					p->base.hitbox.x -= intersect.w;
+					p->base.x = p->base.hitbox.x;
+				}
+				else if (p->velocity[0] < 0) {
+					p->base.hitbox.x += intersect.w;
+					p->base.x = p->base.hitbox.x;
+				}
+				p->velocity[0] = 0;
+			}
+		}
+
+	}
+}
+
+void PlayerCheckGrounded(Player* p, EntityList* elist) {
+	SDL_Rect lower = p->base.hitbox;
+	lower.y += 1;
+	lower.w -= 1;
+	lower.x += 1;
+
+	p->grounded = false;
+
+	for (size_t i = 0; i < elist->size; i++) {
+		Entity* e = elist->entities[i];
+
+		if (e->type != ENTITY_GROUND) continue;
+
+		SDL_Rect eHitbox = {
+			(int)e->hitbox.x,
+			(int)e->hitbox.y,
+			(int)e->hitbox.w,
+			(int)e->hitbox.h,
+		};
+
+		if (SDL_HasIntersection(&lower, &eHitbox)) {
+			p->grounded = true;
+			break;
 		}
 	}
 }
 
 void PlayerApplyPhysics(Player* p, EntityList* elist, float dt) {
-	if (!p->grounded)
-		p->velocity[1] += p->gravity * dt;
-
-	p->base.y += p->velocity[1] * dt;
-
-	p->base.hitbox.y = p->base.y;
-
-	PlayerCollide(p, elist);
+	PlayerCheckGrounded(p, elist);
+	PhysicsApplyGravityPlayer(p, dt);
+	PlayerCollide(p, elist, 2);
 }
-
 
 void PlayerJump(Player* p) {
 	if (!p->grounded || p->jumping) return;

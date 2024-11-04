@@ -186,6 +186,7 @@ xcopy /Y /Q "$(ProjectDir)lib\$(Platform)\SDL2_image.dll" "$(TargetDir)"</Comman
     <ClCompile Include="entitylist.c" />
     <ClCompile Include="ground.c" />
     <ClCompile Include="main.c" />
+    <ClCompile Include="physics.c" />
     <ClCompile Include="player.c" />
     <ClCompile Include="wall.c" />
   </ItemGroup>

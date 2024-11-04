@@ -102,7 +102,7 @@ void _setup() {
 	SDL_RenderPresent(_renderer);
 
 	
-	a = PlayerInitPlayer(WW * 0.5, WH * 0.395, 20 * SCALE_FACTOR, 20 * SCALE_FACTOR, 0.75f, 0.35f, 220.0f, 500.0f, (SDL_Rect) { WW * 0.5, WH * 0.5, 20 * SCALE_FACTOR, 20 * SCALE_FACTOR }, 100.0f);
+	a = PlayerInitPlayer(WW * 0.5, WH * 0.3, 20 * SCALE_FACTOR, 20 * SCALE_FACTOR, 0.75f, 0.35f, 220.0f, 500.0f, (SDL_Rect) { WW * 0.5, WH * 0.5, 20 * SCALE_FACTOR, 20 * SCALE_FACTOR }, 100.0f);
 	g1 = GroundCreateGround(20 * SCALE_FACTOR, WH * 0.8, WW - 40 * SCALE_FACTOR, 20 * SCALE_FACTOR, true, (vec4) { 0, 100, 100, 255 });
 	g2 = GroundCreateGround(20 * SCALE_FACTOR, WH * 0.4, WW - 40 * SCALE_FACTOR, 20 * SCALE_FACTOR, true, (vec4) { 0, 100, 100, 255 });
 	w1 = WallCreateWall(20 * SCALE_FACTOR, 20 * SCALE_FACTOR, 20 * SCALE_FACTOR, WH * 0.6, true, (vec4) { 0, 100, 100, 255 });

@@ -1,9 +1,7 @@
 #pragma once
 
 #include <linmath.h>
+#include <math.h>
+#include "player.h"
 
-typedef struct ray {
-	vec2 position;
-	float angle;
-} Ray;
-
+void PhysicsApplyGravityPlayer(Player* p, float dt);
