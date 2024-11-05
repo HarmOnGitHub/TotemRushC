@@ -173,52 +173,7 @@ void _render() {
 
 	// todo: move to PlayerRender()
 
-	SDL_Rect rect = {
-		(int)a->base.x,
-		(int)a->base.y,
-		(int)a->w,
-		(int)a->h,
-	};
-
-	SDL_Rect rect2 = {
-		(int)a->base.hitbox.x,
-		(int)a->base.hitbox.y,
-		(int)a->w,
-		(int)a->h,
-	};
-
-	SDL_RenderFillRect(_renderer, &rect);
-
-	SDL_SetRenderDrawColor(_renderer, 0, 0, 255, 255);
-	SDL_RenderDrawRect(_renderer, &rect2);
-	SDL_SetRenderDrawColor(_renderer, 255, 0, 0, 255);
-
-	float speed = sqrtf(a->velocity[0] * a->velocity[0] + a->velocity[1] * a->velocity[1]);
-
-	if (speed > 0.1f) {
-		float normX = a->velocity[0] / speed;
-		float normY = a->velocity[1] / speed;
-
-		float offsetDistance = 30.0f;
-
-		float playerCenterX = a->base.x + a->w / 2;
-		float playerCenterY = a->base.y + a->h / 2;
-
-		float indicatorX = playerCenterX + normX * offsetDistance - (a->w * 0.25f) / 2;
-		float indicatorY = playerCenterY + normY * offsetDistance - (a->h * 0.25f) / 2;
-
-
-		SDL_SetRenderDrawColor(_renderer, 0, 255, 0, 255);
-
-		SDL_Rect directionIndicator = {
-			(int)indicatorX,
-			(int)indicatorY,
-			(int)(a->w * 0.25f),
-			(int)(a->h * 0.25f),
-		};
-
-		//SDL_RenderFillRect(_renderer, &directionIndicator);
-	}
+	PlayerRender(a, _renderer);
 
 	
 

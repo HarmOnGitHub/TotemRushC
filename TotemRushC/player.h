@@ -37,3 +37,5 @@ void PlayerJump(Player* p);
 void PlayerInput(Player* p);
 
 void PlayerUpdate(Player* p, float dt, EntityList* elist);
+
+void PlayerRender(Player* p, SDL_Renderer* renderer);

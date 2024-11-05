@@ -183,3 +183,52 @@ void PlayerUpdate(Player* p, float dt, EntityList* elist) {
 
 	PlayerApplyPhysics(p, elist, dt);
 }
+
+void PlayerRender(Player* p, SDL_Renderer* renderer) {
+	SDL_Rect rect = {
+		(int)p->base.x,
+		(int)p->base.y,
+		(int)p->w,
+		(int)p->h,
+	};
+
+	SDL_Rect rect2 = {
+		(int)p->base.hitbox.x,
+		(int)p->base.hitbox.y,
+		(int)p->w,
+		(int)p->h,
+	};
+
+	SDL_RenderFillRect(renderer, &rect);
+
+	SDL_SetRenderDrawColor(renderer, 0, 0, 0, 255);
+	SDL_RenderDrawRect(renderer, &rect2);
+	SDL_SetRenderDrawColor(renderer, 255, 0, 0, 255);
+
+	float speed = sqrtf(p->velocity[0] * p->velocity[0] + p->velocity[1] * p->velocity[1]);
+
+	if (speed > 0.1f) {
+		float normX = p->velocity[0] / speed;
+		float normY = p->velocity[1] / speed;
+
+		float offsetDistance = 30.0f;
+
+		float playerCenterX = p->base.x + p->w / 2;
+		float playerCenterY = p->base.y + p->h / 2;
+
+		float indicatorX = playerCenterX + normX * offsetDistance - (p->w * 0.25f) / 2;
+		float indicatorY = playerCenterY + normY * offsetDistance - (p->h * 0.25f) / 2;
+
+
+		SDL_SetRenderDrawColor(renderer, 0, 255, 0, 255);
+
+		SDL_Rect directionIndicator = {
+			(int)indicatorX,
+			(int)indicatorY,
+			(int)(p->w * 0.25f),
+			(int)(p->h * 0.25f),
+		};
+
+		//SDL_RenderFillRect(_renderer, &directionIndicator);
+	}
+}
